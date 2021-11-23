@@ -1,6 +1,6 @@
 import './App.css'
-import { Link, Routes, Route } from 'react-router-dom'
-import { Layout, Space, Typography } from 'antd'
+import { Routes, Route } from 'react-router-dom'
+import { Layout } from 'antd'
 import {
   Navbar,
   Exchanges,
@@ -8,7 +8,7 @@ import {
   Cryptocurrencies,
   CryptoDetails,
   News,
-  Footer
+  Footer,
 } from './components'
 
 function App() {
@@ -21,20 +21,20 @@ function App() {
         <Layout>
           <div className='routes'>
             <Routes>
-              <Route exact path='/' component={Home} />
-              <Route exact path='/exchanges' component={Exchanges} />
+              <Route exact path='/' element={<Home/>} />
+              <Route exact path='/exchanges' element={<Exchanges/>} />
               <Route
                 exact
                 path='/cryptocurrencies'
-                component={Cryptocurrencies}
+                element={<Cryptocurrencies/>}
               />
-              <Route exact path='/crypto/:coinId' component={CryptoDetails} />
-              <Route exact path='/news' component={News} />
+              <Route exact path='/crypto/:coinId' element={<CryptoDetails/>} />
+              <Route exact path='/news' element={<News/>} />
             </Routes>
           </div>
         </Layout>
         <div className='footer'>
-         <Footer />
+          <Footer />
         </div>
       </div>
     </div>
