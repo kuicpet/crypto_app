@@ -22,11 +22,11 @@ const Cryptocurrencies = ({ simplified }) => {
       }
       const { data } = await axios.get(url, { headers: apiHeaders })
       setCryptos(data.data.coins)
-      console.log('results', data.data.coins)
+      // console.log('results', data.data.coins)
       setloading(false)
     }
     fetchData()
-  }, [])
+  }, [count])
 
   if (loading) return <p>Loading...</p>
   return (
@@ -48,8 +48,8 @@ const Cryptocurrencies = ({ simplified }) => {
                 }
                 hoverable
               >
-                <p>Price: {currency.price}</p>
-                <p>Market cap: {currency.marketCap}</p>
+                <p>Price: {millify(currency.price)}</p>
+                <p>Market cap: {millify(currency.marketCap)}</p>
                 <p>Daily Change: {currency.change}%</p>
               </Card>
             </Link>
