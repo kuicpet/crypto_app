@@ -9,8 +9,13 @@ import { Cryptocurrencies, News } from '.'
 const { Title } = Typography
 
 const Home = () => {
-  const [results, setResults] = useState({})
+  // const [results, setResults] = useState({})
   const [loading, setloading] = useState(false)
+  const [total, setTotal] = useState(0)
+  const [totalMarketCap, setTotalMarketCap] = useState(0)
+  const [total24hVolume, setTotal24hVolume] = useState(0)
+  const [totalMarkets, setTotalMarkets] = useState(0)
+  const [totalExchanges, setTotalExchanges] = useState(0)
   /*const { data, isFetching } = useGetCryptosQuery()
   if (isFetching) return 'Loading...'
   console.log(data)*/
@@ -25,8 +30,13 @@ const Home = () => {
         'x-rapidapi-key': `${API_KEY}`,
       }
       const { data } = await axios.get(url, { headers: apiHeaders })
-      setResults(data.data.stats)
-      // console.log('results', data.data.stats)
+      // setResults(data.data.stats)
+      setTotal(data.data.stats.total)
+      setTotalMarketCap(data.data.stats.totalMarketCap)
+      setTotal24hVolume(data.data.stats.total24hVolume)
+      setTotalMarkets(data.data.stats.totalMarkets)
+      setTotalExchanges(data.data.stats.totalExchanges)
+      console.log('results', data.data.stats)
       setloading(false)
     }
     fetchData()
@@ -44,32 +54,32 @@ const Home = () => {
       ) : (
         <Row>
           <Col span={12}>
-            <Statistic title='Total Cryptocurrencies' value={results.total} />
+            <Statistic title='Total Cryptocurrencies' value={millify(total)} />
           </Col>
           <Col span={12}>
-            <Statistic title='Total Exchanges' value={results.totalExchanges} />
+            <Statistic title='Total Exchanges' value={totalExchanges} />
           </Col>
           <Col span={12}>
             <Statistic
               title='Total Market Cap'
-              value={results.totalMarketCap}
+              value={millify(totalMarketCap)}
             />
           </Col>
           <Col span={12}>
             <Statistic
               title='Total 24h Volume'
-              value={results.total24hVolume}
+              value={millify(total24hVolume)}
             />
           </Col>
           <Col span={12}>
-            <Statistic title='Total Markets' value={results.totalMarkets} />
+            <Statistic title='Total Markets' value={millify(totalMarkets)} />
           </Col>
         </Row>
       )}
 
       <div className='home-heading-container'>
         <Title level={2} className='home-title'>
-          Top 10 cryptocurrencies in the World
+          Top 10 cryptocurrencies
         </Title>
         <Title level={3} className='show-more'>
           <Link to='/cryptocurrencies'>Show more</Link>
