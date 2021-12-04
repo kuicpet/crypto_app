@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Col, Input } from 'antd'
+import { Card, Row, Col, Input, Spin } from 'antd'
 import millify from 'millify'
 import { Link } from 'react-router-dom'
 import { useGetCryptosQuery } from '../services/cryptoApi'
@@ -28,7 +28,7 @@ const Cryptocurrencies = ({ simplified }) => {
     fetchData()
   }, [count])
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <Spin />
   return (
     <>
       <div className='search-crypto'>

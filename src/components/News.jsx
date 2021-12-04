@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Select, Row, Col, Avatar, Card } from 'antd'
+import { Typography, Select, Row, Col, Avatar, Card, Spin } from 'antd'
 import moment from 'moment'
 import axios from 'axios'
 
@@ -11,24 +11,16 @@ const News = ({ simplified }) => {
   const [loading, setloading] = useState(false)
   const [newsCategory, setNewsCategory] = useState('Cryptocurrency')
   const count = simplified ? 6 : 12
-  // const newsCategory = 'Cryptocurrency'
-
-  /*url: 'https://bing-news-search1.p.rapidapi.com/news',
-  params: {safeSearch: 'Off', textFormat: 'Raw'},
-  headers: {
-    'x-bingapis-sdk': 'true',
-    'x-rapidapi-host': 'bing-news-search1.p.rapidapi.com',
-    'x-rapidapi-key': '858b5fdf14mshd6b41216305fe10p1e5c5ejsnc6ba44b4a3a1'
-  }*/
-
+  
   useEffect(() => {
     const url = `https://bing-news-search1.p.rapidapi.com/news/search?q=${newsCategory}&safeSearch=Off&textFormat=Raw&freshness=Day&count=${count}`
+    const API_KEY = process.env.REACT_APP_RAPID_API_KEY
     const fetchData = async () => {
       setloading(true)
       const apiHeaders = {
         'x-bingapis-sdk': 'true',
         'x-rapidapi-host': 'bing-news-search1.p.rapidapi.com',
-        'x-rapidapi-key': '858b5fdf14mshd6b41216305fe10p1e5c5ejsnc6ba44b4a3a1',
+        'x-rapidapi-key': `${API_KEY}`,
       }
       const { data } = await axios.get(url, { headers: apiHeaders })
       setCryptoNews(data.value)
@@ -38,7 +30,7 @@ const News = ({ simplified }) => {
     fetchData()
   }, [count, newsCategory])
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <Spin />
   return (
     <>
       <Row gutter={[24, 24]}>
