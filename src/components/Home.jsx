@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Typography, Row, Col, Statistic, Spin } from 'antd'
 import { useGetCryptosQuery } from '../services/cryptoApi'
 import axios from 'axios'
-import { Cryptocurrencies, News } from '.'
+import { Cryptocurrencies, Exchanges, News } from '.'
 
 const { Title } = Typography
 
@@ -96,6 +96,15 @@ const Home = () => {
         </Title>
       </div>
       {loading ? <Spin /> : <News simplified />}
+      <div className='home-heading-container'>
+        <Title level={2} className='home-title'>
+          Top 10 Exchanges
+        </Title>
+        <Title level={3} className='show-more'>
+          <Link to='/exchanges'>Show more</Link>
+        </Title>
+      </div>
+      {loading ? <Spin /> : <Exchanges simplified />}
     </>
   )
 }

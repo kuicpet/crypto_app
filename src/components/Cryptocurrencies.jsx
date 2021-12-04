@@ -14,11 +14,12 @@ const Cryptocurrencies = ({ simplified }) => {
   const count = simplified ? 10 : 100
   useEffect(() => {
     const url = `https://coinranking1.p.rapidapi.com/coins?limit=${count}`
+    const API_KEY = process.env.REACT_APP_RAPID_API_KEY
     const fetchData = async () => {
       setloading(true)
       const apiHeaders = {
         'x-rapidapi-host': 'coinranking1.p.rapidapi.com',
-        'x-rapidapi-key': '858b5fdf14mshd6b41216305fe10p1e5c5ejsnc6ba44b4a3a1',
+        'x-rapidapi-key': `${API_KEY}`,
       }
       const { data } = await axios.get(url, { headers: apiHeaders })
       setCryptos(data.data.coins)
