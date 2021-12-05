@@ -1,9 +1,11 @@
-import { Card, Col, Row, Spin } from 'antd'
+import { Avatar, Card, Col, Collapse, Row, Spin, Typography } from 'antd'
 import axios from 'axios'
+import HTMLReactParser from 'html-react-parser'
 import millify from 'millify'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+const { Text } = Typography
 const Exchanges = ({ simplified }) => {
   const [exchanges, setExchanges] = useState([])
   const [loading, setLoading] = useState(false)
@@ -27,22 +29,35 @@ const Exchanges = ({ simplified }) => {
   if (loading) return <Spin />
   return (
     <>
-      <Row gutter={[12, 12]} className='crypto-card-container'>
+      <Row>
+        <Col span={6}>Exchanges</Col>
+        <Col span={6}>24h Trade Volume</Col>
+        <Col span={6}>Markets</Col>
+        <Col span={6}>Changes</Col>
+      </Row>
+      <Row>
         {exchanges.map((exchange) => (
-          <Col xs={24} sm={12} lg={6} className='crypto-card' key={exchange.id}>
-            <Link to={`/crypto/${exchange.id}`}>
-              <Card
-                title={`${exchange.rank}, ${exchange.name}`}
-                extra={
-                  <img className='crypto-image' src={exchange.iconUrl} alt='' />
+          <Col span={24}>
+            <Collapse>
+              <Collapse.Panel
+                key={exchange.id}
+                showArrow={false}
+                header={
+                  <Row key={exchange.id}>
+                    <Col span={6}>
+                      <Text><strong>{exchange.rank}</strong></Text>
+                      <Avatar className='exchange-image' src={exchange.iconUrl} />
+                      <Text><strong>{exchange.name}</strong></Text>
+                    </Col>
+                    <Col span={6}>{millify(exchange.volume)}</Col>
+                    <Col span={6}>{millify(exchange.numberOfMarkets)}</Col>
+                    <Col span={6}>{millify(exchange.marketShare)} %</Col>
+                  </Row>
                 }
-                hoverable
               >
-                  <p>Market Share : {millify(exchange.marketShare)} %</p>
-                  <p>Volume: {millify(exchange.volume)}</p>
-                  <p>No of Markets: {millify(exchange.numberOfMarkets)}</p>
-              </Card>
-            </Link>
+                {HTMLReactParser(`${exchange.description}` || '')}
+              </Collapse.Panel>
+            </Collapse>
           </Col>
         ))}
       </Row>

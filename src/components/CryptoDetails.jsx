@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import HTMLReactParser from 'html-react-parser'
 import { useParams } from 'react-router'
-import millify from 'millify'
-import { Col, Row, Typography, Select } from 'antd'
+import { Col, Row, Typography, Select, Spin } from 'antd'
 import axios from 'axios'
 import {
   CheckOutlined,
@@ -14,6 +13,7 @@ import {
   ThunderboltOutlined,
   TrophyOutlined,
 } from '@ant-design/icons'
+import LineChart from './LineChart'
 
 const { Title, Text } = Typography
 const { Option } = Select
@@ -22,7 +22,9 @@ const CryptoDetails = () => {
   const { coinId } = useParams()
   const [timePeriod, setTimePeriod] = useState('7d')
   const [loading, setloading] = useState(false)
-  const [coin, setCoin] = useState({})
+  const [coin, setCoin] = useState([])
+  const [links, setLinks] = useState([])
+  const [coinHistory, setCoinHistory] = useState('')
 
   useEffect(() => {
     const url = `https://coinranking1.p.rapidapi.com/coin/${coinId}`
@@ -35,11 +37,28 @@ const CryptoDetails = () => {
       }
       const { data } = await axios.get(url, { headers: apiHeaders })
       setCoin(data?.data?.coin)
+      setLinks(data.data?.coin?.links)
       console.log('results', data.data.coin)
       setloading(false)
     }
     fetchData()
   }, [coinId])
+  useEffect(() => {
+    const url = `https://coinranking1.p.rapidapi.com/coin/${coinId}/history/${timePeriod}`
+    const API_KEY = process.env.REACT_APP_RAPID_API_KEY
+    const fetchData = async () => {
+      setloading(true)
+      const apiHeaders = {
+        'x-rapidapi-host': 'coinranking1.p.rapidapi.com',
+        'x-rapidapi-key': `${API_KEY}`,
+      }
+      const { data } = await axios.get(url, { headers: apiHeaders })
+      setCoinHistory(data?.data?.change)
+      // console.log('history', data.data.change)
+      setloading(false)
+    }
+    fetchData()
+  }, [coinId, timePeriod])
   const time = ['3h', '24h', '7d', '30d', '1y', '3m', '3y', '5y']
 
   const stats = [
@@ -98,9 +117,11 @@ const CryptoDetails = () => {
     },
   ]
 
+  if (loading) return <Spin />
   return (
     <Col className='coin-detail-container'>
       <Col className='coin-heading-container'>
+        <img src={coin.iconUrl} alt='' style={{maxWidth: '100px', maxHeight: '100px'}} />
         <Title level={2} className='coin-name'>
           {coin.name} ({coin.slug}) Price
         </Title>
@@ -119,6 +140,7 @@ const CryptoDetails = () => {
           <Option key={date}>{date}</Option>
         ))}
       </Select>
+      <LineChart coinHistory={coinHistory} currentPrice={coin.price} coinName={coin.name} />
       <Col className='stats-container'>
         <Col className='coin-value-statistics'>
           <Col className='coin-value-statistics-heading'>
@@ -127,8 +149,8 @@ const CryptoDetails = () => {
             </Title>
             <p>Overview showing stats of {coin.name}</p>
           </Col>
-          {stats.map(({ icon, title, value }) => (
-            <Col className='coin-stats'>
+          {stats.map(({ icon, title, value }, index) => (
+            <Col className='coin-stats' key={index}>
               <Col className='coin-stats-name'>
                 <Text>{icon}</Text>
                 <Text>{title}</Text>
@@ -144,8 +166,8 @@ const CryptoDetails = () => {
             </Title>
             <p>Overview showing stats of all cryptocurrencies</p>
           </Col>
-          {genericStats.map(({ icon, title, value }) => (
-            <Col className='coin-stats'>
+          {genericStats.map(({ icon, title, value }, index) => (
+            <Col className='coin-stats' key={index}>
               <Col className='coin-stats-name'>
                 <Text>{icon}</Text>
                 <Text>{title}</Text>
@@ -155,6 +177,7 @@ const CryptoDetails = () => {
           ))}
         </Col>
       </Col>
+
       <Col className='coin-desc-link'>
         <Row className='coin-desc'>
           <Text level={3} className='coin-details-heading'>
@@ -166,7 +189,7 @@ const CryptoDetails = () => {
           <Text level={3} className='coin-details-heading'>
             {coin.name} links
           </Text>
-          {coin.links.map((link) => (
+          {links.map((link) => (
             <Row className='coin-link' key={link.name}>
               <Title level={5} className='link-name'>
                 {link.type}

@@ -10,6 +10,7 @@ const News = ({ simplified }) => {
   const [cryptoNews, setCryptoNews] = useState([])
   const [loading, setloading] = useState(false)
   const [newsCategory, setNewsCategory] = useState('Cryptocurrency')
+  const [cryptos, setCryptos] = useState([])
   const count = simplified ? 6 : 12
   
   useEffect(() => {
@@ -30,6 +31,23 @@ const News = ({ simplified }) => {
     fetchData()
   }, [count, newsCategory])
 
+  useEffect(() => {
+    const url = `https://coinranking1.p.rapidapi.com/coins?limit=100`
+    const API_KEY = process.env.REACT_APP_RAPID_API_KEY
+    const fetchData = async () => {
+      setloading(true)
+      const apiHeaders = {
+        'x-rapidapi-host': 'coinranking1.p.rapidapi.com',
+        'x-rapidapi-key': `${API_KEY}`,
+      }
+      const { data } = await axios.get(url, { headers: apiHeaders })
+      setCryptos(data.data.coins)
+      // console.log('results', data.data.coins)
+      setloading(false)
+    }
+    fetchData()
+  }, [])
+
   if (loading) return <Spin />
   return (
     <>
@@ -48,19 +66,20 @@ const News = ({ simplified }) => {
               }
             >
               <Option value='Cryptocurrency'>Cryptocurrency</Option>
+              {cryptos.map((coin) => <Option value={coin.name}>{coin.name}</Option>)}
             </Select>
           </Col>
         )}
         {cryptoNews.map((news, i) => (
           <Col xs={24} sm={12} lg={8} key={i}>
-            <Card hoverable className='news-csrd'>
+            <Card hoverable className='news-card'>
               <a href={news.url} target='_blank' rel='noreferrer'>
                 <div className='news-image-container'>
                   <Title className='news-title' level={4}>
                     {news.name}
                   </Title>
                   <img
-                    style={{ maxWidth: '200px', maxHeight: '100px' }}
+                    style={{ maxWidth: '200px', maxHeight: '100px', padding: '0.2rem' }}
                     src={news.image?.thumbnail?.contentUrl}
                     alt='news'
                   />
@@ -77,7 +96,7 @@ const News = ({ simplified }) => {
                       alt=''
                     />
                     <Text className='provider-name'>
-                      {news.provider[0].name}
+                      {news.provider[0]?.name}
                     </Text>
                   </div>
                   <Text>

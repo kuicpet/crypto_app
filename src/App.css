@@ -207,6 +207,7 @@ a:hover{
 
 .coin-desc-link{
   display: flex;
+  justify-content: space-between;
   gap: 40px;
   margin-top: 40px;
   padding-top: 20px;
@@ -293,6 +294,7 @@ padding: 0px 20px;
 }
 .news-card{
   min-height: 300px !important;
+  padding: 1rem;
 }
 .news-image-container{
   display: flex !important;
@@ -300,6 +302,7 @@ padding: 0px 20px;
 }
 .news-title{
 width: 70%;
+margin: 0.2rem;
 }
 
 .news-image-container .img{
