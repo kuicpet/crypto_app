@@ -69,5 +69,9 @@ const Container = styled.div`
   height: 100vh;
   margin: 0px;
   background-color: rgb(0, 21, 41);
+  @media screen and (max-width: 768px){
+    position: relative;
+    height: auto;
+  }
 `
 export default Navbar
