@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, Row, Col, Input, Spin } from 'antd'
 import millify from 'millify'
 import { Link } from 'react-router-dom'
-import { useGetCryptosQuery } from '../services/cryptoApi'
+// import { useGetCryptosQuery } from '../services/cryptoApi'
 import axios from 'axios'
 
 const Cryptocurrencies = ({ simplified }) => {
@@ -39,6 +39,7 @@ const Cryptocurrencies = ({ simplified }) => {
           <Input
             placeholder='Search Cryptocurrencies'
             onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
           />
         </div>
       )}

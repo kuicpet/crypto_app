@@ -1,9 +1,9 @@
-import { Avatar, Card, Col, Collapse, Row, Spin, Typography } from 'antd'
+import { Avatar, Col, Collapse, Row, Spin, Typography } from 'antd'
 import axios from 'axios'
 import HTMLReactParser from 'html-react-parser'
 import millify from 'millify'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 const { Text } = Typography
 const Exchanges = ({ simplified }) => {
